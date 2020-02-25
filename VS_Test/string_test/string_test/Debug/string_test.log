@@ -1,4 +1,0 @@
-﻿  sayings2.cpp
-c:\onedrive - shure\work\techinical_materials\c++\vs_test\string_test\string_test\sayings2.cpp(53): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  string_test.vcxproj -> C:\OneDrive - shure\Work\Techinical_Materials\C++\VS_Test\string_test\Debug\string_test.exe
-  string_test.vcxproj -> C:\OneDrive - shure\Work\Techinical_Materials\C++\VS_Test\string_test\Debug\string_test.pdb (Partial PDB)

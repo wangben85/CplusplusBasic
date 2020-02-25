@@ -1,7 +1,0 @@
-﻿  main.cpp
-  vs2015_qt_signalslot.cpp
-  qrc_vs2015_qt_signalslot.cpp
-  moc_vs2015_qt_signalslot.cpp
-  LINK : C:\Other_Code_Repo\CplusplusBasic\Qt_Test\In_VS_2015_test\vs2015_qt_signalslot\vs2015_qt_signalslot\Debug\\vs2015_qt_signalslot.exe not found or not built by the last incremental link; performing full link
-  vs2015_qt_signalslot.vcxproj -> C:\Other_Code_Repo\CplusplusBasic\Qt_Test\In_VS_2015_test\vs2015_qt_signalslot\vs2015_qt_signalslot\Debug\vs2015_qt_signalslot.exe
-  vs2015_qt_signalslot.vcxproj -> C:\Other_Code_Repo\CplusplusBasic\Qt_Test\In_VS_2015_test\vs2015_qt_signalslot\vs2015_qt_signalslot\Debug\vs2015_qt_signalslot.pdb (Full PDB)

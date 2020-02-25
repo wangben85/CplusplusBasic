@@ -1,7 +1,0 @@
-﻿  main.cpp
-  ConfigureTest.cpp
-  Configure.cpp
-  Generating Code...
-  LINK : C:\Other_Code_Repo\CplusplusBasic\VS_Test\gtest_example\gtest\Debug\gtest.exe not found or not built by the last incremental link; performing full link
-  gtest.vcxproj -> C:\Other_Code_Repo\CplusplusBasic\VS_Test\gtest_example\gtest\Debug\gtest.exe
-  gtest.vcxproj -> C:\Other_Code_Repo\CplusplusBasic\VS_Test\gtest_example\gtest\Debug\gtest.pdb (Partial PDB)

@@ -1,1 +1,0 @@
-Uic'ing buttons.ui...;C:\Qt\5.11.1\msvc2015\bin\uic.exe;"C:\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_buttons\buttons\buttons\buttons.ui" -o ".\GeneratedFiles\ui_buttons.h"
