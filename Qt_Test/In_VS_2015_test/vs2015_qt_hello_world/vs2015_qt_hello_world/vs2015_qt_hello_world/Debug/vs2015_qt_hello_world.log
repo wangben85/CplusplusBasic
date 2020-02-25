@@ -1,0 +1,10 @@
+﻿  Uic'ing vs2015_qt_hello_world.ui...
+  Rcc'ing vs2015_qt_hello_world.qrc...
+  Moc'ing vs2015_qt_hello_world.h...
+   RCC: Warning: No resources in 'C:\Users\wangb\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_hello_world\vs2015_qt_hello_world\vs2015_qt_hello_world\vs2015_qt_hello_world.qrc'.
+  main.cpp
+  vs2015_qt_hello_world.cpp
+  qrc_vs2015_qt_hello_world.cpp
+  moc_vs2015_qt_hello_world.cpp
+  vs2015_qt_hello_world.vcxproj -> C:\Users\wangb\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_hello_world\vs2015_qt_hello_world\Win32\Debug\vs2015_qt_hello_world.exe
+  vs2015_qt_hello_world.vcxproj -> C:\Users\wangb\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_hello_world\vs2015_qt_hello_world\Win32\Debug\vs2015_qt_hello_world.pdb (Full PDB)

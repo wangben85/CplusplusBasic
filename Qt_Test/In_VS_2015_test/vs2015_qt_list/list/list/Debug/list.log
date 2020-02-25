@@ -1,0 +1,10 @@
+﻿  Moc'ing list.h...
+  Rcc'ing list.qrc...
+  Uic'ing list.ui...
+  RCC: Warning: No resources in 'C:\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_list\list\list\list.qrc'.
+  list.cpp
+  main.cpp
+  moc_list.cpp
+  qrc_list.cpp
+  list.vcxproj -> C:\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_list\list\Win32\Debug\list.exe
+  list.vcxproj -> C:\OneDrive - shure\Work\Techinical_Materials\C++\Qt_Test\In_VS_2015_test\vs2015_qt_list\list\Win32\Debug\list.pdb (Full PDB)
