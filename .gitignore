@@ -1,0 +1,8 @@
+/FreeRTOS_Test/Demo/WIN32-MSVC/Debug
+/FreeRTOS_Test/Demo/WIN32-MSVC/*.db
+/FreeRTOS_Test/Demo/WIN32-MSVC/.vs
+/FreeRTOS_Test/Demo/WIN32-MSVC/WIN32.VC.VC.opendb
+/FreeRTOS_Test/tags
+/FreeRTOS_Test/cscope.files
+/FreeRTOS_Test/cscope.out
+/FreeRTOS_Test/cscope_source_test.files
