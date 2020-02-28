@@ -93,12 +93,13 @@
 #include "semphr.h"
 
 /* Priorities at which the tasks are created. */
-#define mainQUEUE_RECEIVE_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
+/* IDLE task priority is the lowest */ 
+#define mainQUEUE_RECEIVE_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )   // receive task prirority is higher than send task
 #define	mainQUEUE_SEND_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
 
 /* The rate at which data is sent to the queue.  The times are converted from
 milliseconds to ticks using the pdMS_TO_TICKS() macro. */
-#define mainTASK_SEND_FREQUENCY_MS			pdMS_TO_TICKS( 200UL )
+#define mainTASK_SEND_FREQUENCY_MS			pdMS_TO_TICKS( 1000UL )
 #define mainTIMER_SEND_FREQUENCY_MS			pdMS_TO_TICKS( 2000UL )
 
 /* The number of items the queue can hold at once. */
@@ -138,27 +139,28 @@ void main_blinky( void )
 const TickType_t xTimerPeriod = mainTIMER_SEND_FREQUENCY_MS;
 
 	/* Create the queue. */
-	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( uint32_t ) );
+	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( uint32_t ) );  //the queue message total size :  mainQUEUE_LENGTH * sizeof( uint32_t )
 
 	if( xQueue != NULL )
 	{
-		/* Start the two tasks as described in the comments at the top of this
-		file. */
+		/* Start the two tasks as described in the comments at the top of this file. */
+		/* RX task priroity is higher than TX task */
 		xTaskCreate( prvQueueReceiveTask,			/* The function that implements the task. */
-					"Rx", 							/* The text name assigned to the task - for debug only as it is not used by the kernel. */
-					configMINIMAL_STACK_SIZE, 		/* The size of the stack to allocate to the task. */
-					NULL, 							/* The parameter passed to the task - not used in this simple case. */
-					mainQUEUE_RECEIVE_TASK_PRIORITY,/* The priority assigned to the task. */
-					NULL );							/* The task handle is not required, so NULL is passed. */
+				"Rx",					/* The text name assigned to the task - for debug only as it is not used by the kernel. */
+				configMINIMAL_STACK_SIZE, 		/* The size of the stack to allocate to the task. */
+				NULL,					/* The parameter passed to the task - not used in this simple case. */
+				mainQUEUE_RECEIVE_TASK_PRIORITY,        /* The priority assigned to the task. */
+				NULL );					/* The task handle is not required, so NULL is passed. */
 
 		xTaskCreate( prvQueueSendTask, "TX", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL );
 
 		/* Create the software timer, but don't start it yet. */
-		xTimer = xTimerCreate( "Timer",				/* The text name assigned to the software timer - for debug only as it is not used by the kernel. */
-								xTimerPeriod,		/* The period of the software timer in ticks. */
-								pdFALSE,			/* xAutoReload is set to pdFALSE, so this is a one-shot timer. */
-								NULL,				/* The timer's ID is not used. */
-								prvQueueSendTimerCallback );/* The function executed when the timer expires. */
+		xTimer = xTimerCreate( "Timer",			/* The text name assigned to the software timer - for debug only as it is not used by the kernel. */
+			      	xTimerPeriod,		        /* The period of the software timer in ticks. */
+                                /*pdFALSE,			[> xAutoReload is set to pdFALSE, so this is a one-shot timer. <]*/
+                                pdTRUE,			        /* xAutoReload is set to pdTrue, it is the periodical timer. */
+				NULL,				/* The timer's ID is not used. */
+				prvQueueSendTimerCallback );    /* The function executed when the timer expires. */
 
 		xTimerStart( xTimer, 0 ); /* The scheduler has not started so use a block time of 0. */
 
@@ -236,7 +238,7 @@ uint32_t ulReceivedValue;
 		indefinitely provided INCLUDE_vTaskSuspend is set to 1 in
 		FreeRTOSConfig.h.  It will not use any CPU time while it is in the
 		Blocked state. */
-		xQueueReceive( xQueue, &ulReceivedValue, portMAX_DELAY );
+		xQueueReceive( xQueue, &ulReceivedValue, portMAX_DELAY ); // ulReceivedValue stored the receive value
 
 		/*  To get here something must have been received from the queue, but
 		is it an expected value?  Normally calling printf() from a task is not
@@ -246,11 +248,11 @@ uint32_t ulReceivedValue;
 		console output) from a FreeRTOS task. */
 		if( ulReceivedValue == mainVALUE_SENT_FROM_TASK )
 		{
-			printf( "Message received from task\r\n" );
+			printf( "Message received data %d from tx task every %d ms\r\n", ulReceivedValue, mainTASK_SEND_FREQUENCY_MS  );
 		}
 		else if( ulReceivedValue == mainVALUE_SENT_FROM_TIMER )
 		{
-			printf( "Message received from software timer\r\n" );
+			printf( "Message received data %d from software timer every %d ms\r\n" , ulReceivedValue, mainTIMER_SEND_FREQUENCY_MS );
 		}
 		else
 		{
@@ -262,10 +264,10 @@ uint32_t ulReceivedValue;
 		if( _kbhit() != 0 )
 		{
 			/* Remove the key from the input buffer. */
-			( void ) _getch();
+		       ( void ) _getch();
 
-			/* Reset the software timer. */
-			xTimerReset( xTimer, portMAX_DELAY );
+		       /* Reset the software timer. */
+                       xTimerReset( xTimer, portMAX_DELAY );
 		}
 	}
 }
