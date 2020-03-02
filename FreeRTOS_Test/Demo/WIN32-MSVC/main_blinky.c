@@ -152,9 +152,10 @@ const TickType_t xTimerPeriod = mainTIMER_SEND_FREQUENCY_MS;
 				mainQUEUE_RECEIVE_TASK_PRIORITY,        /* The priority assigned to the task. */
 				NULL );					/* The task handle is not required, so NULL is passed. */
 
-		xTaskCreate( prvQueueSendTask, "TX", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL );
+		xTaskCreate( prvQueueSendTask, "TX", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL ); //send task priority is lower than receive task
 
 		/* Create the software timer, but don't start it yet. */
+                /* configTIMER_TASK_PRIORITY defined in FreeRTOSConfig.h for the Timer task priority */
 		xTimer = xTimerCreate( "Timer",			/* The text name assigned to the software timer - for debug only as it is not used by the kernel. */
 			      	xTimerPeriod,		        /* The period of the software timer in ticks. */
                                 /*pdFALSE,			[> xAutoReload is set to pdFALSE, so this is a one-shot timer. <]*/
@@ -181,7 +182,7 @@ static void prvQueueSendTask( void *pvParameters )
 {
 TickType_t xNextWakeTime;
 const TickType_t xBlockTime = mainTASK_SEND_FREQUENCY_MS;
-const uint32_t ulValueToSend = mainVALUE_SENT_FROM_TASK;
+const uint32_t ulValueToSend = mainVALUE_SENT_FROM_TASK; //value sent from send task
 
 	/* Prevent the compiler warning about the unused parameter. */
 	( void ) pvParameters;
@@ -238,7 +239,7 @@ uint32_t ulReceivedValue;
 		indefinitely provided INCLUDE_vTaskSuspend is set to 1 in
 		FreeRTOSConfig.h.  It will not use any CPU time while it is in the
 		Blocked state. */
-		xQueueReceive( xQueue, &ulReceivedValue, portMAX_DELAY ); // ulReceivedValue stored the receive value
+		xQueueReceive( xQueue, &ulReceivedValue, portMAX_DELAY ); // receive task block state, ulReceivedValue stored the receive value
 
 		/*  To get here something must have been received from the queue, but
 		is it an expected value?  Normally calling printf() from a task is not
