@@ -36,6 +36,8 @@ public:
   // return value , operator label( parameter)
   MyClass operator-(MyClass temp);
 
+  friend ostream& operator<<(ostream&, MyClass& myClass);
+
 private:
   int code;
   string name;

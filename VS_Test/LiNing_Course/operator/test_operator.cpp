@@ -68,12 +68,18 @@ MyClass MyClass::operator-(MyClass temp)
 }
 
 // function operator, which is not the operator inside class
+// operator +
 MyClass operator*(MyClass &left, MyClass &right)
 {
    MyClass myClass(0);
    int tempCode = left.getValueCode() * right.getValueCode();
    myClass.setValueCode(tempCode);
    return myClass;
+}
+
+ostream& operator<<(ostream& os, MyClass& myClass)
+{
+   return os << myClass.code ;
 }
 
 int main(int argc, const char *argv[])
@@ -95,6 +101,11 @@ int main(int argc, const char *argv[])
     //
     MyClass t6 = t2 * t3;
     cout << "t6 value = " << t6.getValueCode() << endl;
+
+    //
+    MyClass t7(999);
+    cout << t7 << "abc" << endl;
+   //  cout << t7 << endl;
 
     return 0;
 }
