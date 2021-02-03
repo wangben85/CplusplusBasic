@@ -2,9 +2,12 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include "test_class.hpp"
+#include "test_static.hpp"
 
 using namespace std;
+
+// int MyClass::value = 3;  // init the static variable in cpp file
+int MyClass::value = 109;  // init the static variable in cpp file
 
 //constructor
 Person::Person()
@@ -44,7 +47,7 @@ inline void Person::inlineTest()
 MyClass::MyClass()
 {
    m_pMan = new Person();
-   cout << "MyClass::MyClass()" << endl;
+   // cout << "MyClass::MyClass()" << endl;
 }
 
 //user constructor
@@ -58,14 +61,6 @@ MyClass::MyClass( int code , string name)
    cout << "MyClass name is " << name << endl; 
 }
 
-//Copy constructor
-MyClass::MyClass(const MyClass& other)
-{
-  m_pMan = new Person();
-   code = other.code * 2;
-}
-
-#if 1
 //user constructor
 MyClass::MyClass( int code)
 {
@@ -76,28 +71,13 @@ MyClass::MyClass( int code)
   // m_pMan->setCode(666);
   // cout << "m_pMan getCode is " << m_pMan->getCode() << endl;
 }
-#endif
 
-#if 0 // why not work ?
-MyClass::MyClass( string str)
+//static function
+int MyClass::getValueStatic()
 {
-   name = str;
-   cout << "MyClass::MyClass(string name)" << endl;
-   cout << "Only MyClass name is " << name << endl; 
+   // return code;
+   return MyClass::value;
 }
-#endif
-
-// function memeber
-MyClass* MyClass::getObject()
-{
-   return this;
-}
-
-int MyClass::getCode()
-{
-   return code;
-}
-
 
 MyClass::~MyClass()
 {
@@ -140,30 +120,9 @@ int main(int argc, const char *argv[])
    MyClass* p7 = new MyClass( 505, "505Test");
    delete p7;
 
-   // p8
-   MyClass* p8 = new MyClass();
-   if (p8->getObject()  == p8 ) 
-   {
-        cout << "equal" << endl;
-   }
+   //p8
+   cout << "static value is " << MyClass::getValueStatic() << endl;
 
-   // scenarios to call the copy contructor
-   // p9 , p10
-   MyClass p9(300);
-   MyClass p10 = p9;
-   cout << "p10 code is " << p10.getCode() << endl;
-
-   MyClass p11(300);
-   MyClass p12(p11);
-   cout << "p12 code is " << p12.getCode() << endl;
-
-   MyClass p13(200);
-   MyClass p14 = MyClass(p13);
-   cout << "p14 code is " << p14.getCode() << endl;
-
-   MyClass p15(60);
-   MyClass* p16 = new MyClass(p15);
-   cout << "p16 code is " << p16->getCode() << endl;
 
    return 0;
 }

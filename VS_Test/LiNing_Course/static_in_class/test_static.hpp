@@ -1,5 +1,5 @@
 #ifndef TEST_CLASS_HPP
-#define TEST_CLASS_HPP 
+#define TEST_STATIC_HPP 
 
 #include <iostream>
 #include <string>
@@ -38,10 +38,6 @@ public:
   // user defined constructors
   MyClass(int code , string name);
   MyClass(int code);
-//   Myclass(const string str);
-
-  //copy constructor
-  MyClass(const MyClass& other);
   
   //deconstructor
   // 1. no return value
@@ -49,17 +45,21 @@ public:
   ~MyClass();
 
   //function memebers
-  int getCode();
-  MyClass *getObject();
-
+  static int getValueStatic();
 
 private:
+
   const int months = 12;
+  
   enum 
   {
     months1 = 12
   };
+
   static const int months2 = 12;
+  
+  //static variable
+  static int value;  // could not init here, but do it in cpp file
   
   int code;
   string name;
