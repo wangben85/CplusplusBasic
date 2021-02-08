@@ -5,6 +5,18 @@
 
 using namespace std;
 
+// class Remotecontroller;
+class TV;
+
+#if 1   // use the function inside Remotecontroller
+// class remotecontroller
+class Remotecontroller
+{
+public:
+   void setTVState( TV &tv);     // must implementation later
+   void setTVProgramIndex( TV &tv, int index);  // must implementation later
+};
+
 // class TV
 class TV
 {
@@ -21,7 +33,54 @@ public:
     }
 
 private:
-    friend class Remotecontroller;     // Remotecontroller is the friend class of TV, it could access all the private memebers inside TV
+    
+   // just put some fucntions insdie Remotecontroller here as the friend function
+   friend void Remotecontroller::setTVState( TV &tv);
+   friend void Remotecontroller::setTVProgramIndex( TV &tv, int index);
+
+   bool mState = false;  // TV state:  On: True ; Off: False
+   int mProgramIndex = 0 ;   // TV channel index
+};
+
+// implementation of the friend function inside Remotecontroller
+void Remotecontroller::setTVState( TV &tv)
+{
+    tv.mState = ~tv.mState; 
+}
+
+void Remotecontroller::setTVProgramIndex( TV &tv, int index)
+{
+    if (tv.mState == true)
+    {
+        tv.mProgramIndex = index;
+    }
+    else
+    {
+        cerr << "TV is OFF, could not set program index" << endl;
+    }
+}
+
+#endif
+
+
+#if 0   // directly put the whole class Remotecontroller as the friend class
+// class TV
+class TV
+{
+public:
+    // friend class Remotecontroller;     // it can also put here, no matther of keyword "public" or "private" 
+ 
+    bool getState()
+    {
+         return mState;
+    }
+    int getProgramIndex()
+    {
+        return mProgramIndex;
+    }
+
+private:
+    friend class Remotecontroller;     //directly put the class Remotecontroller is the friend class of TV, it could access all the private memebers inside TV
 
     bool mState = false;  // TV state:  On: True ; Off: False
     int mProgramIndex = 0 ;   // TV channel index
@@ -47,6 +106,7 @@ public:
        }
    }
 };
+#endif
 
 // main
 int main(int argc, const char *argv[])
