@@ -121,7 +121,7 @@ int main(int argc, const char *argv[])
     {
         cout << *it << ',' << endl;
     }
-    // default is ascending order
+        // default is ascending order
     sort(numbers.begin(), numbers.end()); 
     cout << "After ascending orders: " << endl;
     for( auto it = numbers.begin(); it != numbers.end(); it++ )
@@ -129,12 +129,40 @@ int main(int argc, const char *argv[])
         cout << *it << ',' << endl;
     }
 
-    // descending order
+        // descending order
     sort(numbers.begin(), numbers.end(), descend_func);
     cout << "After descending orders: " << endl;
     for( auto it = numbers.begin(); it != numbers.end(); it++ )
     {
         cout << *it << ',' << endl;
     }
+
+    // find,  find element in the vector
+    // vector<int>::iterator it_find = find(numbers.begin(), numbers.end(), 10); // Found
+    // vector<int>::iterator it_find = find(numbers.begin(), numbers.end(), 20); // Found
+    vector<int>::iterator it_find = find(numbers.begin(), numbers.end(), 7); // Not Found
+    if ( it_find != numbers.end() )
+    {
+        cout << "Found!!" << endl;
+    }
+    else
+    {
+        cout << "Not Found!!" << endl;
+    }
+
+    // copy, one vector to another
+    cout << "numbers elements are " << endl;
+    for( auto v:numbers)
+    {
+        cout << v << endl;
+    }
+    vector<int> numbers1(4);   // '4' must be here, before copy ,we have to allocate memory space
+    copy( numbers.begin(), numbers.end(), numbers1.begin());
+    cout << "numbers1 elements are " << endl;
+    for( auto v:numbers1)
+    {
+        cout << v << endl;
+    }
+
     return 0;
 }
