@@ -1,0 +1,50 @@
+/***************************************************************************//**
+* @file
+*     This file contains utilites to convert between addresses and their meanings for Custom Group.
+*
+* @note    None
+*
+* @warning None
+*******************************************************************************/
+
+
+#ifndef DMPADDRUTILPROXYFWUPD_H
+#define DMPADDRUTILPROXYFWUPD_H
+
+#include "DmpProxyFwUpdAddrDefinitions.h"
+
+
+#ifdef __ICCAVR__
+#include "BspStdTypes.h"
+#else
+#include <stdint.h>
+#endif
+
+
+/**
+ * @addtogroup DMP_defs    DMP address definititions.
+ * @{
+ */
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/*
+ * Addr = base + ProxyDeviceId * ADDRESS_SPACING_BETWEEN_PROXY_DEVICES 
+ */
+ 
+uint8_t GetProxyFwUpdDmpAddress( uint32_t *pDmpAddress, uint32_t DmpAddressBase, uint32_t pdId );
+uint8_t GetProxyIdFromDmpAddress( uint32_t address, uint32_t *pDmpAddressBase, uint32_t *pPdId );
+
+#ifdef __cplusplus
+}
+#endif
+
+
+/*! @} */
+
+
+#endif   // DMPADDRUTILPROXYFWUPD_H
+
+

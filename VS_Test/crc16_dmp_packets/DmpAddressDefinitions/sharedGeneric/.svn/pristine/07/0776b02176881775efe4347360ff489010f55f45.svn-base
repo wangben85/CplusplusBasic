@@ -1,0 +1,74 @@
+/***************************************************************************//**
+* @file
+*     This file contains utilites to convert between addresses and their meanings for Custom Group.
+*
+* @note    None
+*
+* @warning None
+*******************************************************************************/
+
+
+#ifndef DMPADDRUTILCUSTOMGROUP_H
+#define DMPADDRUTILCUSTOMGROUP_H
+
+#include "DmpCustomGroupAddrDefinitions.h"
+#include "FreqTable.h"
+
+#if defined( __IAR_SYSTEMS_ICC__ )
+   #if !defined( __ICCARM__ )
+      #include "BspStdTypes.h"
+   #else
+      #include "stdint.h"
+   #endif
+#else
+   #include <types.h>
+#endif
+
+
+#ifndef FALSE
+   #if defined( false )
+      #define FALSE  false
+   #else
+      #define FALSE  0
+   #endif
+#endif
+
+#ifndef TRUE
+   #if defined( true )
+      #define TRUE   true
+   #else
+      #define TRUE   !FALSE
+   #endif
+#endif
+
+/**
+ * @addtogroup DMP_defs    DMP address definititions.
+ * @{
+ */
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define DMP_CUSTOM_GROUP_BASE_ADDRESS 0x01071100
+
+uint8_t GetCustomGroupDmpAddress( uint32_t *pDmpAddress, GroupId_t CusGroup, ChannelId_t Channel );
+uint8_t GetCustomGroupChannelFromDmpAddress( uint32_t address, GroupId_t *pCusGroup, ChannelId_t *pChannel );
+uint8_t IsCustomGroupAllChannelDmpAddress( uint32_t address, GroupId_t *pCusGroup );
+uint8_t IsCustomGroupAllChannelInternalEventAddress( uint32_t address, GroupId_t *pCusGroup );
+uint8_t GetCustomGroupAddressMask( uint32_t *pDmpAddressMask, GroupId_t CusGroup );
+uint8_t GetCustomGroupAllChannelAddress( uint32_t *pDmpAddress, GroupId_t CusGroup );
+uint8_t GetCustomGroupAllChannelInternalEventAddress( uint32_t *pDmpAddress, GroupId_t CusGroup );
+
+#ifdef __cplusplus
+}
+#endif
+
+
+/*! @} */
+
+
+#endif   // DMPADDRUTILCUSTOMGROUP_H
+
+

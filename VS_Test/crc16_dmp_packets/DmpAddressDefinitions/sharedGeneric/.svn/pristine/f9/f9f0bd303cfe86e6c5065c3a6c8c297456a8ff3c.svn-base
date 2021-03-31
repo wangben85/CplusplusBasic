@@ -1,0 +1,100 @@
+/***************************************************************************//**
+* @file
+*
+*     Functions to retrieve channel and offset information from a given
+*     DMP address.
+*
+* @note
+*     These functions are shared between the portables and the rack units.
+*
+* @warning  None
+*
+*******************************************************************************/
+
+
+#include "DmpAddrUtilityProxyFwUpd.h"
+#ifndef __ICCAVR__
+#include <stdint.h>
+#include "assert.hpp"
+#endif
+
+
+/**
+ * @addtogroup DMP_defs    DMP address definititions.
+ * @{
+ */
+
+
+// Definitions defined on the DDL page on the Deki.
+// http://deki.shure.com/Line_4_Project/Line_4_Architecture/3._Views/Data_Model/DDL_Addressing
+
+
+/***************************************************************************//**
+* function to retrieve DMP Address information from a given firmware ID and Proxy Id information
+*
+* @return  True if success, false otherwise.
+*
+* @param [out]    pDmpAddress   pointer to the DMP Address
+* @param [in]     DmpAddressBase  DMP address to the Firmware ID base    
+* @param [in]     pdId       Proxy device ID
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetProxyFwUpdDmpAddress( uint32_t *pDmpAddress, uint32_t DmpAddressBase, uint32_t pdId )
+{
+   uint8_t retVal = FALSE;
+
+   //NULL check, Range Check
+   if ( NULL != pDmpAddress )
+   {
+      *pDmpAddress = DmpAddressBase + ( uint32_t )( ADDRESS_SPACING_BETWEEN_PROXY_DEVICES ) * pdId;
+      retVal = TRUE;
+   }
+
+   return retVal;
+}
+
+/***************************************************************************//**
+* function to retrieve Firmware ID and Proxy Device ID information from DMP Address
+*
+* @return  True if the address is a Custom Group/Channel, false otherwise.
+*
+* @param [in]        address        the DMP Address
+* @param [in,out]    pDmpAddressBase      pointer to the Firmware address base
+* @param [in,out]    pPdId       pointer to the Proxy Device ID
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetProxyIdFromDmpAddress( uint32_t address, uint32_t *pDmpAddressBase, uint32_t *pPdId )
+{
+   uint8_t     retVal = FALSE;
+   uint32_t    offset = address - DMP_PROXY_FIRMWARE_UPDATE_BASE_ADDRESS;
+   
+   if ( ( NULL != pDmpAddressBase ) && ( NULL != pPdId ) )
+   {
+      //get 
+      *pPdId = offset / ADDRESS_SPACING_BETWEEN_PROXY_DEVICES;
+      *pDmpAddressBase = ( offset % ADDRESS_SPACING_BETWEEN_PROXY_DEVICES ) + DMP_PROXY_FIRMWARE_UPDATE_BASE_ADDRESS;
+
+      retVal = TRUE;
+   
+   }
+
+   return retVal;
+}
+
+
+/*! @} */
+
+
+

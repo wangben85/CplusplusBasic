@@ -1,0 +1,97 @@
+/***************************************************************************//**
+* @file
+*    This file contains utilities to convert between Matrix Mixer Input/Output
+*    channels and DMP addresses.
+*
+* @note       none
+*
+* @warning    none
+*******************************************************************************/
+
+#include "DmpMatrixMixerAddrUtility.h"
+#include "DmpChannelAddrDefinitions.h"
+#include "RfChannelDefinitions.h"
+#include "DmpAddrUtility.h"
+#include "assert.hpp"
+
+#define MATRIX_MIXER_INPUT_CHAN_MASK 0x0F
+
+/***************************************************************************//**
+ * Get DMP address for a given Matrix Mixer CrossPoint and offset
+ *
+ * @param[in]  inputChan   input channel of the crosspoint
+ * @param[in]  outputChan  output channel of the crosspoint
+ * @param[in]  offset      the offset to use as a base for the address calculation
+ *
+ * @return     The DMP address
+ *
+ * @note       None
+ *
+ * @warning    None
+ ******************************************************************************/
+uint32_t GetDmpMatrixMixerAddress( uint32_t inputChan, RfChannel_t outputChan, uint32_t offset )
+{
+   uint32_t dmpAddress = DMP_CHANNEL_BASED_ADDRESS;
+
+   // add output channel
+   dmpAddress |= ( ( outputChan << DMP_CHANNEL_SHIFT ) & DMP_CHANNEL_MASK );
+
+   // add offset
+   dmpAddress |= ( offset & DMP_CHANNEL_OFFSET_MASK );
+
+   // add input channel
+   dmpAddress += inputChan;
+
+   return dmpAddress;
+}
+
+
+/***************************************************************************//**
+ * Get the crosspoint input/output channel and offset from a DMP address
+ *
+ * @param[in]  dmpAddress  The source address to use for the calculation
+ * @param[out] inputChan   input channel calculated from the DMP address
+ * @param[out] outputChan  output channel calculated from the DMP address
+ * @param[out] offset      offset calculated from the DMP address
+ *
+ * @return     1 if pointers are valid and proper outputs are calculated
+ *             0 otherwise
+ *
+ * @note       None
+ *
+ * @warning    None
+ ******************************************************************************/
+uint8_t GetDmpMatrixMixerOffset( uint32_t dmpAddress, uint32_t* inputChan, RfChannel_t* outputChan, uint32_t* offset )
+{
+   uint8_t ret_val = 0;
+
+   if ( 0 != offset && 0 != inputChan && 0 != outputChan )
+   {
+      uint32_t inputChanOffset;
+
+      if ( GetDmpChannelOffset(dmpAddress, outputChan, &inputChanOffset) )
+      {
+         if ( inputChanOffset >= DMP_CHANN_AUDIO_MGMT_MATRIX_MIXER_INPUT_GAIN_OFFSET )
+         {
+            //get inputChan
+            *inputChan = (inputChanOffset - DMP_CHANN_AUDIO_MGMT_MATRIX_MIXER_INPUT_GAIN_OFFSET)
+                         & MATRIX_MIXER_INPUT_CHAN_MASK;
+            //get offset
+            *offset = inputChanOffset - *inputChan;
+
+            //currently only supports "gain" and "enable"
+            if ( DMP_CHANN_AUDIO_MGMT_MATRIX_MIXER_INPUT_GAIN_OFFSET == *offset ||
+                 DMP_CHANN_AUDIO_MGMT_MATRIX_MIXER_INPUT_ENABLE_OFFSET == *offset )
+            {
+               ret_val = 1;
+            }
+         }
+      }
+   }
+   else
+   {
+      ASSERT_INFO( "Invalid pointer" );
+   }
+
+   return ret_val;
+}
