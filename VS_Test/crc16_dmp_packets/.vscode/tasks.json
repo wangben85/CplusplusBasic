@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe build active file",
+			"command": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe",
+			"args": [
+				"-g",
+				// source files
+				"${workspaceFolder}/*.cpp",   
+				"${workspaceFolder}/sharedCrc16/*.c",   
+				"${workspaceFolder}/DmpParser/*.c",   
+				"${workspaceFolder}/DmpParser/*.cpp",   
+				"${workspaceFolder}/DmpAddressDefinitions/sharedGeneric/*.c",
+				"-o",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+				// header files
+				"-I",   
+				"${workspaceFolder}/sharedCrc16",
+				"-I",   
+				"${workspaceFolder}/DmpParser",
+				"-I",   
+				"${workspaceFolder}/DmpAddressDefinitions/cppHeaderFiles",
+				"-I",   
+				"${workspaceFolder}/DmpAddressDefinitions/sharedGeneric"
+				"-I",   
+				"${workspaceFolder}/"
+			],
+			"options": {
+				"cwd": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: \"C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe\""
+		}
+	]
+}

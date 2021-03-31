@@ -1,0 +1,29 @@
+/***************************************************************************//**
+* @file
+*    This file contains utilities to convert between Matrix Mixer Input/Output
+*    channels and DMP addresses.
+*
+* @note       none
+*
+* @warning    none
+*******************************************************************************/
+
+
+#ifndef MATRIXMIXERADDRUTIL_H
+#define MATRIXMIXERADDRUTIL_H
+
+#include <stdint.h>
+#include "RfChannelDefinitions.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+uint32_t GetDmpMatrixMixerAddress( uint32_t inputChan, RfChannel_t outputChan, uint32_t offset );
+uint8_t GetDmpMatrixMixerOffset( uint32_t dmpAddress, uint32_t* inputChan, RfChannel_t* outputChan, uint32_t* offset );
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // MATRIXMIXERADDRUTIL_H
