@@ -24,9 +24,12 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
    RfChannel_t channel = RF_CHANNEL_1;
    TypeSize ts = {DMPUnknown,0,false};// default and dummy for read
    uint8_t* dmpValueTemp = reinterpret_cast<uint8_t*>(dmpValue);
-   
-   if (GetDmpChannelOffset(address, &channel, &offset))   // channel based dmp
+
+   if ( DMP_SET_PROPERTY == vector)
    {
+     if (GetDmpChannelOffset(address, &channel, &offset))   // channel based dmp
+     // if (( dmpValueTemp!=NULL) && (GetDmpChannelOffset(address, &channel, &offset)))   // channel based dmp
+     {
       switch (offset)
       {
          case DMP_CHANN_GENERIC_CHAN_NAME_OFFSET:
@@ -126,8 +129,9 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
             break;      
         }
       }
-   else    // Device DMP
-   {
+     else    // Device DMP
+     // else if ( dmpValueTemp!=NULL)
+     {
       switch( address )
       {
          case DMP_GEN_MODEL_NAME:
@@ -267,7 +271,9 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
             ts = {DMPUnknown,0,false};
             break;
       }
+     }
    }
+
    *DmpPayloadSize  = DMPX::CreateDmpMsg( pPackBuffer, vector, address, reinterpret_cast<const uint8_t*>(dmpValueTemp), ts );
    pReturnBuffer = pPackBuffer;
    return pReturnBuffer;

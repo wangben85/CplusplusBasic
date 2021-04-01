@@ -62,28 +62,24 @@ void Crc16MsgGenerateSend( uint8_t* CrcPayloadBuffer, uint16_t CrcPayloadSize )
    for (uint32_t i = 0; i < Crc16IpPacketSize; i++)
    {
      dummy =  pUartPrint[i];
-    //  cout << hex << pUartPrint[i] << endl;
+
+     // cout print the crc16 packets
      cout << hex << setw(2) << setfill('0') <<  (int)dummy;
    }
      cout << endl;
 }
 
-int main()
+// test to audio gain DMP set crc16 packets
+void test_againDmpSet()
 {
-  cout << "Hello World!" << endl;
-  cout << "Hello Ben!" << endl;
+  cout << "Audio again set" << endl;
 
   //DMP full packet buffer
   uint8_t* pDmpFullPacketBuff;
   uint16_t DmpPayloadSize = 0;
-  // char again[] = "6";  // 6dB
-  // char again[] = "-2";    // -2dB
-  char again[] = "1";    // 1dB
-
-  // cout << "intput str: " << endl;  
-  // cin  >> (char *)str;
-  // cout << "output str: " << endl;  
-  // cout << str << endl;
+  // char again[] = "1";    // 1 dB   crc16 packet "1122000308097009020202000102014f62"
+  // char again[] = "6";       // 6 dB   crc16 packet "1122000308097009020202000102068d23"
+  char again[] = "-2";      // -2 dB  crc16 packet "1122000308097009020202000102fe0f22"
 
   // DMP address for audio gain
   uint32_t address =  GetDmpChannelAddress ( RF_CHANNEL_1,  DMP_CHANN_AUDIO_MGMT_GAIN_OFFSET );
@@ -91,8 +87,176 @@ int main()
   //prepare DMP data, audio gain in dB
   pDmpFullPacketBuff = DmpMsgGenerate( again , &DmpPayloadSize, address, DMP_SET_PROPERTY );
 
-	//prepare CRC16 data
+	//prepare CRC16 data and print
 	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+// test to audio gain DMP get crc16 packets
+void test_againDmpGet()
+{
+  cout << "Audio again get" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  char again[] = "";  // Note: In VSCode here, dont use "NULL" otherwise it occurs issue 
+                      // get audio gain crc16 packets "112200030808700801020200010241f7"
+
+  // DMP address for audio gain
+  uint32_t address =  GetDmpChannelAddress ( RF_CHANNEL_1,  DMP_CHANN_AUDIO_MGMT_GAIN_OFFSET );
+   
+  //prepare DMP data, audio gain in dB
+  pDmpFullPacketBuff = DmpMsgGenerate( again , &DmpPayloadSize, address, DMP_GET_PROPERTY );
+
+	//prepare CRC16 data and print
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+
+// test to audio high pass filter DMP set crc16 packets
+void test_hpfilDmpSet()
+{
+  cout << "Audio high pass filter set" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  // char hpfil[] = "100" ;            // 100 Hz, crc16 packets "11220003080970090202020001076434a1"
+  // char hpfil[] = "160" ;               // 160 Hz, crc16 packets "1122000308097009020202000107a0a7a0"
+  char hpfil[] = "180" ;               // 180 Hz, crc16 packets "1122000308097009020202000107b4a8a0"
+
+  // DMP address for audio high pass filter in Hz
+  uint32_t address =  GetDmpChannelAddress ( RF_CHANNEL_1,  DMP_CHANN_AUDIO_MGMT_HIGH_PASS_FILTER_FREQ_OFFSET );
+   
+  //prepare DMP data, audio high pass filter in Hz
+  pDmpFullPacketBuff = DmpMsgGenerate( hpfil , &DmpPayloadSize, address, DMP_SET_PROPERTY );
+
+	//prepare CRC16 data and print
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+// test to audio high pass filter DMP get crc16 packets
+void test_hpfilDmpGet()
+{
+  cout << "Audio high pass filter Get" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  char hpfil[] = "";  // Note: In VSCode here, dont use "NULL" otherwise it occurs issue
+                      // get audio high pass filter crc16 packets "11220003080870080102020001074237"
+  // DMP address for audio high pass filter in Hz
+  uint32_t address =  GetDmpChannelAddress ( RF_CHANNEL_1,  DMP_CHANN_AUDIO_MGMT_HIGH_PASS_FILTER_FREQ_OFFSET );
+   
+  //prepare DMP data, audio high pass filter in Hz
+  pDmpFullPacketBuff = DmpMsgGenerate( hpfil , &DmpPayloadSize, address, DMP_GET_PROPERTY );
+
+	//prepare CRC16 data and print
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+
+// test to device name DMP set crc16 packets
+void test_devNameDmpSet()
+{
+  cout << "Device Name set" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  // char devName[] = "AD3";      // device name is "AD3", crc16 packets "11220003080d700d0202010000120005414433c9c2"
+  char devName[] = "TesT";      // device name is "Blackhawk", crc16 packets "11220003080e700e0202010000120006546573546a2e"
+
+  // DMP address for device name
+  uint32_t address =  DMP_GEN_DEVICE_NAME;
+   
+  //prepare DMP data, device name
+  pDmpFullPacketBuff = DmpMsgGenerate( devName , &DmpPayloadSize, address, DMP_SET_PROPERTY );
+
+	//prepare CRC16 data and print
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+// test to device name DMP get crc16 packets
+void test_devNameDmpGet()
+{
+  cout << "Device Name Get" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  char devName[] = "";     // Note: In VSCode here, dont use "NULL" otherwise it occurs issue
+                           // get device name crc16 packets "112200030808700801020100001259f7"
+
+  // DMP address for device name
+  uint32_t address =  DMP_GEN_DEVICE_NAME;
+   
+  //prepare DMP data, device name
+  pDmpFullPacketBuff = DmpMsgGenerate( devName, &DmpPayloadSize, address, DMP_GET_PROPERTY );
+
+	//prepare CRC16 data and print
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+// test to generally get the crc16 packets according to DMP address, vector type and DMP value
+void test_crc16PacketGenerate()
+{
+  cout << "Get the crc16 packet generally" << endl;
+
+  //DMP full packet buffer
+  uint8_t* pDmpFullPacketBuff;
+  uint16_t DmpPayloadSize = 0;
+  char dmpAddress[] = "";
+  int dmpVector;
+  char dmpSetValue[] = "";
+  char dmpGetValue[] = ""; // dummy
+
+  cout << "1. Intput the DMP address first: " << endl;  
+  cin  >> dmpAddress;
+  cout << "1. The DMP address is : " << endl;  
+  cout << dmpAddress << endl;
+
+  cout << "2. Intput the DMP property vector, get(1) or set(2): " << endl;  
+  cin  >> dmpVector;
+  cout << "2. The DMP vector is : " << endl;  
+  cout << dmpVector << endl;
+
+  if ( dmpVector == 2) // set DMP
+  {
+    cout << "3. Intput the DMP property value when the vector is 'set'(2) : " << endl;  
+    cin  >> dmpSetValue;
+    cout << "3. The DMP set value is : " << endl;  
+    cout << dmpSetValue << endl;
+  }
+
+  // DMP address from dmpAddress input
+  uint32_t address = strtoul(dmpAddress, NULL, 16) ;
+   
+  //prepare DMP data , get or set
+  pDmpFullPacketBuff = DmpMsgGenerate( (dmpVector == 1)? dmpGetValue: dmpSetValue , &DmpPayloadSize, address, (dmpVector == 1)? DMP_GET_PROPERTY: DMP_SET_PROPERTY );
+
+  //prepare CRC16 data
+	Crc16MsgGenerateSend( pDmpFullPacketBuff, DmpPayloadSize );
+}
+
+
+
+int main()
+{
+  cout << "Main" << endl;
+ 
+  // set DMP
+  // test_againDmpSet();   // set audio gain
+  // test_hpfilDmpSet();      // set audio high pass fitler
+  // test_devNameDmpSet();    // set device name
+
+  // get DMP
+  // test_againDmpGet();   // get audio gain
+  // test_hpfilDmpGet();   // get audio high pass filter
+  // test_devNameDmpGet();    // get device name
+
+  // general test
+  test_crc16PacketGenerate();
 
   return 0;
 }
