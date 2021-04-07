@@ -7,3 +7,5 @@
 /FreeRTOS_Test/cscope.out
 /FreeRTOS_Test/cscope_source_test.files
 test
+Debug
+Release
