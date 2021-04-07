@@ -1,0 +1,277 @@
+/***************************************************************************//**
+* @file
+*
+*     Functions to retrieve channel and offset information from a given
+*     DMP address.
+*
+* @note
+*     These functions are shared between the portables and the rack units.
+*
+* @warning  None
+*
+*******************************************************************************/
+
+
+#include "DmpAddrUtilityCustomGroup.h"
+
+#if defined( __IAR_SYSTEMS_ICC__ ) && !defined( __ICCARM__ )
+   #include "cbool.h"
+#elif !defined( __ICCARM__ )
+   #include <vxWorks.h>
+#endif
+
+
+/**
+ * @addtogroup DMP_defs    DMP address definititions.
+ * @{
+ */
+
+
+// Definitions defined on the DDL page on the Deki.
+// http://deki.shure.com/Line_4_Project/Line_4_Architecture/3._Views/Data_Model/DDL_Addressing#(02_xx_xx_xx)_Channel_properties
+
+
+/***************************************************************************//**
+* function to retrieve DMP Address information from a given Custom Group/Channel information
+*
+* @return  True if the address is channel-based, false otherwise.
+*
+* @param [out]    pDmpAddress   pointer to the DMP Address
+* @param [in]     CusGroup      Custom Group (0~5)
+* @param [in]     Channel       Channel (0~59)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetCustomGroupDmpAddress( uint32_t *pDmpAddress, GroupId_t CusGroup, ChannelId_t Channel )
+{
+   uint8_t retVal = FALSE;
+
+   //NULL check, Range Check
+   if ( ( NULL != pDmpAddress ) && ( CusGroup < NUM_CUSTOM_GROUPS ) && ( Channel < NUM_CUSTOM_CHANNELS ) )
+   {
+      *pDmpAddress = DMP_CUSTOM_GROUP_BASE_ADDRESS + ( uint32_t )( ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS ) * CusGroup + Channel + 1; //the first DMP in group is "ALL CHANNELS ADDRESS"
+      retVal = TRUE;
+   }
+
+   return retVal;
+}
+
+/***************************************************************************//**
+* function to retrieve Custom Group/Channel information from DMP Address
+*
+* @return  True if the address is a Custom Group/Channel, false otherwise.
+*
+* @param [in]        address        the DMP Address
+* @param [in,out]    pCusGroup      pointer to the Custom Group (0~5)
+* @param [in,out]    pChannel       pointer to Channel (0~59)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetCustomGroupChannelFromDmpAddress( uint32_t address, GroupId_t *pCusGroup, ChannelId_t *pChannel )
+{
+   uint8_t     retVal = FALSE;
+   uint32_t    offset = address - DMP_CUSTOM_GROUP_BASE_ADDRESS;
+   uint32_t    group;
+   uint32_t    channel;
+
+   if ( ( NULL != pCusGroup ) && ( NULL != pChannel ) )
+   {
+      //get group/channel
+      group = offset / ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+      channel = offset % ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+
+      //range check
+      if (  ( group < NUM_CUSTOM_GROUPS ) &&
+            ( channel > 0 ) &&
+            ( channel <= NUM_CUSTOM_CHANNELS )  )
+      {
+         *pCusGroup = (GroupId_t) group;
+         *pChannel = (ChannelId_t)( channel - 1 ); //channel starts from 0; address offset starts from 1;
+         retVal = TRUE;
+      }
+   }
+
+   return retVal;
+}
+
+
+/***************************************************************************//**
+* function to check if a DMP address is Custom Group/ALL Channel
+*
+* @return  True if the address is Custom Group/ALL CHANNEL, false otherwise.
+*
+* @param [in]        address        the DMP Address
+* @param [in,out]    pCusGroup      pointer to the Custom Group (0~5)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t IsCustomGroupAllChannelDmpAddress( uint32_t address, GroupId_t *pCusGroup )
+{
+   uint8_t     retVal = FALSE;
+   uint32_t    offset = address - DMP_CUSTOM_GROUP_BASE_ADDRESS;
+   uint32_t    group;
+   uint32_t    channel;
+
+   if ( NULL != pCusGroup )
+   {
+      //get group/channel
+      group = offset / ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+      channel = offset % ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+
+      //range check
+      if (  ( group < NUM_CUSTOM_GROUPS ) && ( 0 == channel )  )
+      {
+         *pCusGroup = (GroupId_t) group;
+         retVal = TRUE;
+      }
+   }
+
+   return retVal;
+}
+
+
+/***************************************************************************//**
+* function to check if a Internal Event DMP address is Custom Group/ALL Channel
+*
+* @return  True if the address is Custom Group/ALL CHANNEL, false otherwise.
+*
+* @param [in]        address        the DMP Address
+* @param [in,out]    pCusGroup      pointer to the Custom Group (0~5)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t IsCustomGroupAllChannelInternalEventAddress( uint32_t address, GroupId_t *pCusGroup )
+{
+   uint8_t     retVal = FALSE;
+   uint32_t    offset = address - DMP_CUSTOM_GROUP_BASE_ADDRESS;
+   uint32_t    group;
+   uint32_t    channel;
+
+   if ( NULL != pCusGroup )
+   {
+      //get group/channel
+      group = offset / ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+      channel = offset % ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS;
+
+      //range check
+      if (  ( group < NUM_CUSTOM_GROUPS ) && ( OFFSET_CUSTOM_GROUPS_ALL_CHANNEL_INTERNAL_EVENT == channel )  )
+      {
+         *pCusGroup = (GroupId_t) group;
+         retVal = TRUE;
+      }
+   }
+
+   return retVal;
+}
+
+
+/***************************************************************************//**
+* function to retrieve DMP Address for ALL Channel from a given Custom Group
+*
+* @return  True if the address is channel-based, false otherwise.
+*
+* @param [in,out] pDmpAddress   pointer to the DMP Address for ALL channels
+* @param [in]     CusGroup      Custom Group (0~5)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetCustomGroupAllChannelAddress( uint32_t *pDmpAddress, GroupId_t CusGroup )
+{
+   uint8_t retVal = FALSE;
+
+   if ( ( NULL != pDmpAddress ) && ( CusGroup < NUM_CUSTOM_GROUPS ) )
+   {
+      *pDmpAddress = DMP_CUSTOM_GROUP_1_ALL_CHANNELS_ADDRESS + ( uint32_t )( ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS ) * CusGroup;
+      retVal = TRUE;
+   }
+
+   return retVal;
+}
+
+
+/***************************************************************************//**
+* function to retrieve INTERNAL EVENT DMP Address for ALL Channel from a given Custom Group
+*
+* @return  True if the address is channel-based, false otherwise.
+*
+* @param [in,out] pDmpAddress   pointer to the DMP Address for ALL channels
+* @param [in]     CusGroup      Custom Group (0~5)
+*
+* @note
+*     This used to pass ALL channel event internally through Event Server
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetCustomGroupAllChannelInternalEventAddress( uint32_t *pDmpAddress, GroupId_t CusGroup )
+{
+   uint8_t retVal = FALSE;
+
+   if ( ( NULL != pDmpAddress ) && ( CusGroup < NUM_CUSTOM_GROUPS ) )
+   {
+      *pDmpAddress = DMP_CUSTOM_GROUP_1_ALL_CHANNELS_ADDRESS + ( uint32_t )( ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS ) * CusGroup + ( uint32_t ) OFFSET_CUSTOM_GROUPS_ALL_CHANNEL_INTERNAL_EVENT;
+      retVal = TRUE;
+   }
+
+   return retVal;
+}
+
+/***************************************************************************//**
+* function to retrieve DMP Address Mask information from a given Custom Group
+*
+* @return  True if the address is channel-based, false otherwise.
+*
+* @param [in,out] pDmpAddressMask   pointer to the DMP Address Mask
+* @param [in]     CusGroup      Custom Group (0~5)
+*
+* @note
+*     None
+*
+* @warning
+*     None
+********************************************************************************
+*/
+uint8_t GetCustomGroupAddressMask( uint32_t *pDmpAddressMask, GroupId_t CusGroup )
+{
+   uint8_t retVal = FALSE;
+
+   if ( ( NULL != pDmpAddressMask ) && ( CusGroup < NUM_CUSTOM_GROUPS ) )
+   {
+      *pDmpAddressMask = DMP_CUSTOM_GROUP_1_ADDR_MASK + ( uint32_t )( ADDRESS_SPACING_BETWEEN_CUSTOM_GROUPS ) * CusGroup;
+      retVal = TRUE;
+   }
+
+   return retVal;
+}
+
+
+/*! @} */
+
+
+

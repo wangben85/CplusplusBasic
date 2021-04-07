@@ -164,9 +164,12 @@ void test_devNameDmpSet()
   //DMP full packet buffer
   uint8_t* pDmpFullPacketBuff;
   uint16_t DmpPayloadSize = 0;
-  // char devName[] = "AD3";      // device name is "AD3", crc16 packets "11220003080d700d0202010000120005414433c9c2"
-  char devName[] = "TesT";      // device name is "Blackhawk", crc16 packets "11220003080e700e0202010000120006546573546a2e"
-
+  // device name is "AD3", crc16 packets "11220003080d700d0202010000120005414433c9c2"
+  // char devName[] = "AD3";  
+  
+  // device name is "TesT", crc16 packets "11220003080e700e0202010000120006546573546a2e"
+    char devName[] = "TesT";      
+  
   // DMP address for device name
   uint32_t address =  DMP_GEN_DEVICE_NAME;
    
