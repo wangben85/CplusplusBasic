@@ -213,11 +213,15 @@ void test_crc16PacketGenerate()
   int dmpVector;
   char dmpSetValue[] = "";
   char dmpGetValue[] = ""; // dummy
+  uint32_t address = 0;    // dmp address
 
   cout << "1. Intput the DMP address first: " << endl;  
   cin  >> dmpAddress;
   cout << "1. The DMP address is : " << endl;  
   cout << dmpAddress << endl;
+
+  // DMP address from terminal input dmpAddress
+  address = strtoul(dmpAddress, NULL, 16) ;
 
   cout << "2. Intput the DMP property vector, get(1) or set(2): " << endl;  
   cin  >> dmpVector;
@@ -231,10 +235,7 @@ void test_crc16PacketGenerate()
     cout << "3. The DMP set value is : " << endl;  
     cout << dmpSetValue << endl;
   }
-
-  // DMP address from dmpAddress input
-  uint32_t address = strtoul(dmpAddress, NULL, 16) ;
-   
+  
   //prepare DMP data , get or set
   pDmpFullPacketBuff = DmpMsgGenerate( (dmpVector == 1)? dmpGetValue: dmpSetValue , &DmpPayloadSize, address, (dmpVector == 1)? DMP_GET_PROPERTY: DMP_SET_PROPERTY );
 

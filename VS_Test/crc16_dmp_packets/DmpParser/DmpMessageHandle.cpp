@@ -2,6 +2,13 @@
 #include "DmpMessageHandle.hpp"
 #include "RfChannelDefinitions.h"
 #include "DmpAddrUtility.h"
+#include <string> 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>    // in order to use for_each, we have to include this
+#include <iomanip>
+
 
 /***************************************************************************//**
  * Creates a DMP PDU based on the given inputs
@@ -23,12 +30,11 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
    uint32_t offset = 0;
    RfChannel_t channel = RF_CHANNEL_1;
    TypeSize ts = {DMPUnknown,0,false};// default and dummy for read
-   uint8_t* dmpValueTemp = reinterpret_cast<uint8_t*>(dmpValue);
-
+   uint32_t* dmpValueTemp = reinterpret_cast<uint32_t*>(dmpValue);
+   
    if ( DMP_SET_PROPERTY == vector)
    {
      if (GetDmpChannelOffset(address, &channel, &offset))   // channel based dmp
-     // if (( dmpValueTemp!=NULL) && (GetDmpChannelOffset(address, &channel, &offset)))   // channel based dmp
      {
       switch (offset)
       {
@@ -69,8 +75,8 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
 
          case DMP_CHANN_RF_TRANSMIT_LEVEL_OFFSET:
             {
-               ts = {DMPs1int, 2, false};
-               *dmpValueTemp = atoi(dmpValue);
+               ts = {DMPs2int, 2, false};
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
@@ -92,8 +98,8 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
 
          case DMP_CHANN_AUDIO_MGMT_TONE_GEN_FREQUENCY_OFFSET:
             {
-               ts = {DMPu1int, 2, false};
-               *dmpValueTemp = atoi(dmpValue);
+               ts = {DMPu2int, 2, false};
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
@@ -102,15 +108,14 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_CHANN_RF_SECONDARYFREQ_OFFSET:
          case DMP_CHANN_SECURITY_ENCRYPTION_KEY_TAG_OFFSET:
             {
-               ts = {DMPu1int, 4, false};
-               *dmpValueTemp = atoi(dmpValue);
+               ts = {DMPu4int, 4, false};
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
          case DMP_CHANN_LINKDEV_CID(LD_SLOT_1):
             {
                ts = {DMPfixBinOb, 16, false};
-               *dmpValueTemp = atoi(dmpValue);
             }
             break;
 
@@ -120,7 +125,6 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_CHANN_SECURITY_ENCRYPTION_SEED_1_C_OFFSET:
             {
                ts = {DMPfixBinOb, 32, false};
-               *dmpValueTemp = atoi(dmpValue);
             }
             break;
 
@@ -130,7 +134,6 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
         }
       }
      else    // Device DMP
-     // else if ( dmpValueTemp!=NULL)
      {
       switch( address )
       {
@@ -189,7 +192,7 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_POWER_SOURCE_BATTERY_VOLTAGE:
             {
                ts = {DMPs2int, 2, false};
-               *dmpValueTemp = atoi(dmpValue);
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
@@ -229,7 +232,7 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_POWER_SOURCE_BATTERY_TIME_TO_FULL:
             {
                ts = {DMPu2int, 2, false};
-               *dmpValueTemp = atoi(dmpValue);
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
@@ -246,7 +249,7 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_ACN_INTERFACE_ID:   
             {
                ts = {DMPu4int, 4, false};
-               *dmpValueTemp = atoi(dmpValue);
+               *dmpValueTemp = strtoul(dmpValue, NULL, 10) ;
             }
             break;
 
@@ -254,7 +257,6 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_ACN_CURRENT_DCID:
             {
                ts = {DMPfixBinOb, 16, false};
-               *dmpValueTemp = atoi(dmpValue);
             }
             break;
 
@@ -263,7 +265,6 @@ uint8_t* DmpMsgGenerate( char * dmpValue, uint16_t* DmpPayloadSize, uint32_t add
          case DMP_ZIGBEE_EUI_64:
             {
                ts = {DMPfixBinOb, 8, false};
-               *dmpValueTemp = atoi(dmpValue);
             }
             break;
 
